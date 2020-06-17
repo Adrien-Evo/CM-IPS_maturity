@@ -1,0 +1,93 @@
+##Mainfolder
+
+viz: "plots"
+data.processed: "data/processed"
+
+##TSS data
+
+tss.gene: "data/external/GRCh37_TSS.bed"
+tss.transcript: "data/external/TSS_ensembl_havana_CCDS_transcripts.bed"
+
+
+###CHhromHMM colormapping file for plots
+color.mapping.cmips: "data/external/chromHMM_color_CMIPS_state_mapping.csv"
+color.mapping.encode.15: "data/external/chromHMM_color_ENCODE_15_states_mapping.csv"
+color.mapping.encode.18: "data/external/chromHMM_color_ENCODE_18_states_mapping.csv"
+
+################
+## CHROMHMM 11 states merged samples with stringent peak calling
+################
+chromhmm_merged: "data/raw/chromHMM_11_merged_stringent/learn_11_states_9/11_states_merged_5fold_5signal_11_segments.bed"
+
+#chromHMM 11 states merged annotated with HOMER and Homo_sapiens.GRCh37.87.gtf from Ensembl
+chromhmm_merged_annotated: "data/raw/chromHMM_11_merged_stringent/samp_11_segments_9_annotated.txt"
+
+#chromHMM 11 states merged annotated with HOMER with the most recent interpretation of states and some recoding of annotation
+chromhmm_homer: "data/processed/chromhmm_cmips.txt"
+chromhmm.c: "data/processed/chromhmm_cmips.bed"
+#chromHMM 11 states merged annotated with HOMER and Homo_sapiens.GRCh37.87.gtf from Ensembl
+chromhmm_merged_annotated_tss_ccds: "data/raw/chromHMM_11_merged_stringent/11_states_merged_5fold_5signal_11_segments_homer_tss_ccds.txt"
+
+#chromHMM 11 states merged annotated with HOMER with the most recent interpretation of states and some recoding of annotation
+chromhmm_homer_tss_ccds: "data/processed/chromhmm_cmips_tss_ccds.txt"
+
+#################
+##ENCODE SAMPLES
+#################	
+#chromHMM 18 states right heart ventricule annotated with HOMER
+ENCODE.HRT.VENT.R: "data/external/ROADMAP-15-states-chromHMM/E104_18_core_K27ac_stateno.bed"
+ENCODE.HRT.VENT.R.a: "data/external/ROADMAP-15-states-chromHMM/E104_18_core_K27ac_stateno_annotated.txt"
+HRT.VENT.R.a: "data/processed/HRT.VENT.R.annotated.txt"
+HRT.VENT.R.c: "data/processed/HRT.VENT.R.cleaned.txt"
+
+#chromHMM 15 states ENCODE cleaned : States are merged together to be comparable across different states
+ENCODE.HRT.FET.a: "data/external/ROADMAP-15-states-chromHMM/E083_15_coreMarks_stateno_annotated.txt"
+HRT.FET.a: "data/processed/HRT.FET.annotated.txt"
+ENCODE.HRT.FET: "data/external/ROADMAP-15-states-chromHMM/E083_15_coreMarks_stateno.bed"
+HRT.FET.c: "data/processed/HRT.FET.cleaned.txt"
+
+
+#chromHMM 18 states cleaned : States are merged together to be comparable across different states
+ENCODE.HRT.VENT.L: "data/external/ROADMAP-15-states-chromHMM/E095_18_core_K27ac_stateno.bed"
+HRT.VENT.L.c: "data/processed/HRT.VENT.L.cleaned.txt"
+
+
+#chromHMM 18 states ENCODE cleaned : States are merged together to be comparable across different states
+ENCODE.HRT.ATR.R: "data/external/ROADMAP-15-states-chromHMM/E105_18_core_K27ac_stateno.bed"
+HRT.ATR.R.c: "data/processed/HRT.ATR.R.cleaned.txt"
+
+
+#IPS chromHMM 18 states ENCODE cleaned : States are merged together to be comparable across different states
+ENCODE.IPS: "data/external/ROADMAP-15-states-chromHMM/E020_18_core_K27ac_stateno.bed"
+ENCODE.IPS.a: "data/external/ROADMAP-15-states-chromHMM/E020_18_core_K27ac_stateno_annotated.txt"
+
+IPS.a: "data/processed/IPS.annotated.txt"
+IPS.c: "data/processed/IPS.cleaned.txt"
+#Fetal male brain 15 states ENCODE cleaned : States are merged together to be comparable across different states
+ENCODE.BRN.FET: "data/external/ROADMAP-15-states-chromHMM/E081_15_coreMarks_stateno.bed"
+BRN.FET.c: "data/processed/BRN.FET.cleaned.txt"
+#Male brain 15 states ENCODE cleaned : States are merged together to be comparable across different states
+ENCODE.BRN.ADLT: "data/external/ROADMAP-15-states-chromHMM/E071_18_core_K27ac_stateno.bed"
+BRN.ADLT.c: "data/processed/BRN.ADLT.cleaned.txt"
+
+###############
+## Intersect folder : Intersection between chromHMM states of ENCODE and our sample
+###############
+
+intersect.all.CMIPS.VENT.R: "data/processed/ventricule-right-comparison/CM-IPS_VENT.R_full_intersect.bed"
+intersect.all.CMIPS.VENT.R.tss_windows_1kb: "data/processed/ventricule-right-comparison-only_TSS_1kb_window/CM-IPS_VENT.R_full_intersect.bed"
+intersect.all.CMIPS.VENT.R.tss.ccds: "data/processed/ventricule-right-comparison-TSS-overlap/CM-IPS_VENT.R_full_intersect.bed"
+
+intersect.all.CMIPS.FET: "data/processed/fetal-heart-comparison/CM-IPS_FET.HRT_full_intersect.bed"
+intersect.all.CMIPS.FET.tss_windows_1kb: "data/processed/fetal-heart-comparison-only_TSS_1kb_window/CM-IPS_FET.HRT_full_intersect.bed"
+intersect.all.CMIPS.FET.tss.ccds: "data/processed/fetal-heart-comparison-TSS-overlap/CM-IPS_FET.HRT_full_intersect.bed"
+
+intersect.tss: "data/processed/TSS_ensembl_havana_CCDS_transcripts.txt"
+
+##############
+## Clustering
+##############
+cluster.full.gower: "data/processed/clustering/full_gower.txt"
+kmeans.all: "data/processed/clustering/kmeans_all.txt"
+
+
