@@ -87,7 +87,7 @@ intersect.tss: "data/processed/TSS_ensembl_havana_CCDS_transcripts.txt"
 ##############
 ## Clustering
 ##############
-cluster.full.gower: "data/processed/clustering/full_gower.txt"
+cluster.gower.diana: "data/processed/clustering/gower.diana.txt"
 kmeans.all: "data/processed/clustering/kmeans_all.txt"
 
 

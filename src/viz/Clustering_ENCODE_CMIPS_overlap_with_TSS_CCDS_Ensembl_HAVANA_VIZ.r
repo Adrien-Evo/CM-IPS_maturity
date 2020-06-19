@@ -29,30 +29,219 @@ getrgb <-function(x){
 chromHMM_color_scheme = sapply(all_colors$V2,getrgb)
 names(chromHMM_color_scheme) <- all_colors$V1
 chromHMM_color_scheme
+
+
+###############################################################
+### Levels order
+###############################################################
+merged_HMM_order = c("Active_promoter","Weak_promoter","Poised_promoter","Strong_enhancer","Poised_enhancer","Polycomb_repressed","Heterochrom_lowsignal")
+encode_HMM_order = c("TssA","TssAFlnk","TssBiv","EnhG",
+                                "EnhA","EnhWk","EnhBiv","BivFlnk"
+                                "ReprPC","Het")
+
 ####################################
 ## Clustering samples
 ####################################
-divisive.clust.tissue = readRDS(radio$cluster.tissue) 
-col_dend = as.dendrogram(divisive.clust.tissue)
+#divisive.gower.diana 
 
 
 #######################################
-## kmeans
+## KMEANS data
 #######################################
 
 kmeans = read.table(file.path(rootfolder,radio$kmeans.all), h=T, sep ="\t", stringsAsFactors=FALSE)
 
-mat = as.matrix(kmeans[,1:6])
 
-  pdf(file.path(rootfolder,"plots","clustering","simple_mat.pdf"),width=8, height=8)
+mat = as.matrix(kmeans[,1:6])
+# reorder column into CMIPS HRT.VENT.L HRT.VENT.R HRT.ATR.R IPS HRT.FET
+
+
+pdf(file.path(rootfolder,"plots","clustering","all.pdf"),width=8, height=8)
 
 ComplexHeatmap::Heatmap(mat,
                           col = chromHMM_color_scheme,
                           jitter = TRUE,
+                          show_row_names = FALSE,
                           heatmap_legend_param=list(title = "ChromHMM annot"),
                           use_raster = TRUE, raster_device = "png",raster_quality =1)
 dev.off()
 
+
+
+### Levels ordering
+
+mat = as.matrix(kmeans[,1:6])
+# reorder column into CMIPS HRT.VENT.L HRT.VENT.R HRT.ATR.R IPS HRT.FET
+
+sort_order = order(match(mat[,1],merged_HMM_order),
+                            match(mat[,2],encode_HMM_order),
+                            match(mat[,3],encode_HMM_order),
+                            match(mat[,4],encode_HMM_order),
+                            match(mat[,5],encode_HMM_order),
+                            match(mat[,6],encode_HMM_order))
+mat <- mat[sort_order,]
+
+pdf(file.path(rootfolder,"plots","clustering","all_sorted_levels.pdf"),width=8, height=8)
+
+ComplexHeatmap::Heatmap(mat,
+                          col = chromHMM_color_scheme,
+                          jitter = TRUE,
+                          show_row_names = FALSE,
+                          heatmap_legend_param=list(title = "ChromHMM annot"),
+                          use_raster = TRUE, raster_device = "png",raster_quality =1)
+dev.off()
+
+
+
+#################################################
+##### KMEANS 3
+#################################################
+
+mat = as.matrix(kmeans[order(kmeans$kmeans3),1:6])
+
+pdf(file.path(rootfolder,"plots","clustering","kmeans3.pdf"),width=8, height=8)
+
+ComplexHeatmap::Heatmap(mat,
+                          col = chromHMM_color_scheme,
+                          jitter = TRUE,
+                          show_row_names = FALSE,
+                          border = TRUE,
+                          heatmap_legend_param=list(title = "ChromHMM annot"),
+                          row_split= kmeans$kmeans3[order(kmeans$kmeans3)],
+                          use_raster = TRUE, raster_device = "png",raster_quality =1)
+dev.off()
+
+
+
+### Levels ordering
+mat = as.matrix(kmeans[,1:6])
+
+sort_order = order(kmeans$kmeans3,
+                            match(mat[,1],merged_HMM_order),
+                            match(mat[,2],encode_HMM_order),
+                            match(mat[,3],encode_HMM_order),
+                            match(mat[,4],encode_HMM_order),
+                            match(mat[,5],encode_HMM_order),
+                            match(mat[,6],encode_HMM_order))
+#mat <- mat[sort_order,]
+
+pdf(file.path(rootfolder,"plots","clustering","kmeans3_sorted_levels.pdf"),width=8, height=8)
+
+ComplexHeatmap::Heatmap(mat[sort_order,],
+                          col = chromHMM_color_scheme,
+                          jitter = TRUE,
+                          show_row_names = FALSE,
+                          border = TRUE,
+                          heatmap_legend_param=list(title = "ChromHMM annot"),
+                          row_split= factor(kmeans$kmeans3[sort_order],levels = c(1,2,3)),
+                          cluster_row_slices = FALSE,
+                          use_raster = FALSE, raster_device = "png",raster_quality =1)
+dev.off()
+
+#################################################
+##### KMEANS 10
+#################################################
+
+mat = as.matrix(kmeans[order(kmeans$kmeans10),1:6])
+
+pdf(file.path(rootfolder,"plots","clustering","kmeans10.pdf"),width=8, height=8)
+
+ComplexHeatmap::Heatmap(mat,
+                          col = chromHMM_color_scheme,
+                          jitter = TRUE,
+                          show_row_names = FALSE,
+                          border = TRUE,
+                          heatmap_legend_param=list(title = "ChromHMM annot"),
+                          row_split= kmeans$kmeans10[order(kmeans$kmeans10)],
+                          use_raster = TRUE, raster_device = "png",raster_quality =1)
+dev.off()
+
+
+### Levels ordering
+mat = as.matrix(kmeans[,1:6])
+
+sort_order = order(kmeans$kmeans10,
+                            match(mat[,1],merged_HMM_order),
+                            match(mat[,2],encode_HMM_order),
+                            match(mat[,3],encode_HMM_order),
+                            match(mat[,4],encode_HMM_order),
+                            match(mat[,5],encode_HMM_order),
+                            match(mat[,6],encode_HMM_order))
+
+pdf(file.path(rootfolder,"plots","clustering","kmeans10_sorted_levels.pdf"),width=8, height=8)
+
+ComplexHeatmap::Heatmap(mat[sort_order,],
+                          col = chromHMM_color_scheme,
+                          jitter = TRUE,
+                          show_row_names = FALSE,
+                          border = TRUE,
+                          heatmap_legend_param=list(title = "ChromHMM annot"),
+                          row_split= factor(kmeans$kmeans10[sort_order],levels = 1:10),
+                          cluster_row_slices = FALSE,
+                          use_raster = FALSE, raster_device = "png",raster_quality =1)
+dev.off()
+
+#################################################
+##### KMEANS 15
+#################################################
+
+
+
+### Levels ordering
+mat = as.matrix(kmeans[,1:6])
+
+sort_order = order(kmeans$kmeans15,
+                            match(mat[,1],merged_HMM_order),
+                            match(mat[,2],encode_HMM_order),
+                            match(mat[,3],encode_HMM_order),
+                            match(mat[,4],encode_HMM_order),
+                            match(mat[,5],encode_HMM_order),
+                            match(mat[,6],encode_HMM_order))
+
+pdf(file.path(rootfolder,"plots","clustering","kmeans15_sorted_levels.pdf"),width=8, height=8)
+
+ComplexHeatmap::Heatmap(mat[sort_order,],
+                          col = chromHMM_color_scheme,
+                          jitter = TRUE,
+                          show_row_names = FALSE,
+                          border = TRUE,
+                          heatmap_legend_param=list(title = "ChromHMM annot"),
+                          row_split= factor(kmeans$kmeans15[sort_order],levels = 1:15),
+                          cluster_row_slices = FALSE,
+                          use_raster = FALSE, raster_device = "png",raster_quality =1)
+dev.off()
+
+
+
+#################################################
+##### KMEANS 20
+#################################################
+
+
+
+### Levels ordering
+mat = as.matrix(kmeans[,1:6])
+
+sort_order = order(kmeans$kmeans20,
+                            match(mat[,1],merged_HMM_order),
+                            match(mat[,2],encode_HMM_order),
+                            match(mat[,3],encode_HMM_order),
+                            match(mat[,4],encode_HMM_order),
+                            match(mat[,5],encode_HMM_order),
+                            match(mat[,6],encode_HMM_order))
+
+pdf(file.path(rootfolder,"plots","clustering","kmeans20_sorted_levels.pdf"),width=8, height=8)
+
+ComplexHeatmap::Heatmap(mat[sort_order,],
+                          col = chromHMM_color_scheme,
+                          jitter = TRUE,
+                          show_row_names = FALSE,
+                          border = TRUE,
+                          heatmap_legend_param=list(title = "ChromHMM annot"),
+                          row_split= factor(kmeans$kmeans20[sort_order],levels = 1:20),
+                          cluster_row_slices = FALSE,
+                          use_raster = FALSE, raster_device = "png",raster_quality =1)
+dev.off()
 
 #######################################################
 ####  Active TSS plotting
