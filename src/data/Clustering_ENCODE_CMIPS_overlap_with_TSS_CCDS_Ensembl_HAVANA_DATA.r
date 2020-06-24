@@ -24,7 +24,7 @@ tss_intersect.dcast[sapply(tss_intersect.dcast, is.character)] <- lapply(tss_int
                                                                          as.factor)
 
 head(tss_intersect.dcast)
-####Testing byt reducing the number of ENCODE states (HEt, ZNF, Tx and Quies into regulation that we cna't reach with our histones marks)
+####Testing by reducing the number of ENCODE states (HEt, ZNF, Tx and Quies into regulation that we cna't reach with our histones marks)
 
 
 tss_intersect.dcast[tss_intersect.dcast == "Quies"] <- "Het"
@@ -76,4 +76,4 @@ tss_intersect.dcast$kmeans20 = kmodes_20_all$cluster
 
 tss_intersect.dcast <- tss_intersect.dcast[,c(1,2,4,5,6,3,7,8,9,10,11)]
 
-write.table(tss_intersect.dcast, file.path(rootfolder,radio$kmeans.all), row.names=FALSE, col.names=TRUE,sep="\t")
+write.table(tss_intersect.dcast, file.path(rootfolder,radio$kmeans.all), row.names=TRUE, col.names=TRUE,sep="\t")
