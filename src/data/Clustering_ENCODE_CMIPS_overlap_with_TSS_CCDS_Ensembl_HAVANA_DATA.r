@@ -35,7 +35,7 @@ tss_intersect.dcast[tss_intersect.dcast == "ZNF_Rpts"] <- "Het"
 tss_intersect.dcast <- tss_intersect.dcast[,-c(1,2)]
 head(tss_intersect.dcast)
 
-
+colnames(tss_intersect.dcast) <- c("CM-iPS","HRT.ATR.R","HRT.VENT.L","HRT.VENT.R","IPS","HRT.FET")
   
 ####################################
 ## Clustering gene with gower distance

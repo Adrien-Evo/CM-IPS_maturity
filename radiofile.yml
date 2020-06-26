@@ -4,10 +4,11 @@ viz: "plots"
 data.processed: "data/processed"
 
 ##TSS data
-
 tss.gene: "data/external/GRCh37_TSS.bed"
 tss.transcript: "data/external/TSS_ensembl_havana_CCDS_transcripts.bed"
 
+## Annot data for wikipathway and clusterProfiler
+wikipathway.gmt: "data/external/wikipathways-20200110-gmt-Homo_sapiens.gmt"
 
 ###CHhromHMM colormapping file for plots
 color.mapping.cmips: "data/external/chromHMM_color_CMIPS_state_mapping.csv"

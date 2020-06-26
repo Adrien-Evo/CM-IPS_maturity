@@ -19,6 +19,8 @@ colour15 = read.table(file.path(rootfolder,radio$color.mapping.encode.15),sep="\
 colours18 = read.table(file.path(rootfolder,radio$color.mapping.encode.18),sep="\t")
 
 colourcmips= read.table(file.path(rootfolder,radio$color.mapping.cmips),sep="\t")
+##Keeping only annotation that we have
+colourcmips = colourcmips[c(1,2,3,4,5,10,11),]
 
 all_colors = rbind(colour15,colours18,colourcmips)
 
@@ -27,33 +29,71 @@ getrgb <-function(x){
 }
 
 chromHMM_color_scheme = sapply(all_colors$V2,getrgb)
+sapply(colourcmips$V2,getrgb)
+
 names(chromHMM_color_scheme) <- all_colors$V1
 chromHMM_color_scheme
 
+#######################################################
+####  Encode colored matrix for niceness
+#######################################################
+
+ENCODE_samps = c("HRT.ATR.R","HRT.VENT.L","HRT.VENT.R","IPS","HRT.FET")  
+ENCODE.col = "#377eb8"
+CM_IPS.col = "#e41a1c"
+
+fetal.col = "#c51b7d"
+adult.col = "#4d9221"
+ips.col = "#f1b6da"
+
+right.atrium.col = "#66c2a5"
+left.ventricule.col = "#8da0cb"
+right.ventricule.col ="#a6d854"
+brain.col = "#e5c494"
+heart.col = "#e41a1c"
+#Colors from 8-class Set2 R colorbrewer
+############# Source
+source.cols = c(CM_IPS.col,rep(ENCODE.col,length(ENCODE_samps)))
+names(source.cols ) <- c("CM-iPS",rep("ENCODE",length(ENCODE_samps)))
+source.cols
+
+###Maturity 
+stage.cols = c(CM_IPS.col,adult.col,adult.col,adult.col,ips.col,fetal.col)
+names(stage.cols) <- c("CM-iPS","Mature","Mature","Mature","iPS","Fetal")
+
+tissue.cols = c(CM_IPS.col,right.atrium.col,left.ventricule.col,right.ventricule.col, ips.col,fetal.col)
+
+tissue.cols
+
+rlab=t(cbind(source.cols,stage.cols,tissue.cols))
+
+rownames(rlab)=c("Data origin","Cell type", "Tissue type")
+
+matrix.annotation = HeatmapAnnotation(Source = names(source.cols ),Maturity = names(stage.cols ), col = list(Source = source.cols,Maturity = stage.cols ))
 
 ###############################################################
 ### Levels order
 ###############################################################
 merged_HMM_order = c("Active_promoter","Weak_promoter","Poised_promoter","Strong_enhancer","Poised_enhancer","Polycomb_repressed","Heterochrom_lowsignal")
-encode_HMM_order = c("TssA","TssAFlnk","TssBiv","EnhG",
-                                "EnhA","EnhWk","EnhBiv","BivFlnk"
-                                "ReprPC","Het")
+encode_HMM_order = c("TssA","TssAFlnk","TssBiv","EnhG","EnhA","EnhWk","EnhBiv","BivFlnk","ReprPC","Het")
 
 ####################################
 ## Clustering samples
 ####################################
 #divisive.gower.diana 
-
-
+lgd = Legend(labels=colourcmips$V1, legend_gp = colourcmips)
+#ENCODE legend
+all_colors = rbind(colour15,colours18)
+all_colors = unique
+ENCODE_leg = 
 #######################################
 ## KMEANS data
 #######################################
 
-kmeans = read.table(file.path(rootfolder,radio$kmeans.all), h=T, sep ="\t", stringsAsFactors=FALSE)
+kmeans = read.table(file.path(rootfolder,radio$kmeans.all), h=T, sep ="\t", stringsAsFactors=FALSE,check.names=FALSE)
 
 
 mat = as.matrix(kmeans[,1:6])
-# reorder column into CMIPS HRT.VENT.L HRT.VENT.R HRT.ATR.R IPS HRT.FET
 
 
 pdf(file.path(rootfolder,"plots","clustering","all.pdf"),width=8, height=8)
@@ -62,7 +102,10 @@ ComplexHeatmap::Heatmap(mat,
                           col = chromHMM_color_scheme,
                           jitter = TRUE,
                           show_row_names = FALSE,
-                          heatmap_legend_param=list(title = "ChromHMM annot"),
+                          heatmap_legend_param=lgd,
+                          bottom_annotation = matrix.annotation,
+                          column_names_side = "top",
+                          column_names_rot = 45,
                           use_raster = TRUE, raster_device = "png",raster_quality =1)
 dev.off()
 
@@ -437,3 +480,4 @@ rlab=t(cbind(source.cols,stage.cols,tissue.cols))
 
 rownames(rlab)=c("Data origin","Cell type", "Tissue type")
 # Heatmap(test.dcast, name = "mat",col = chromHMM_color_scheme,  cluster_rows=row_dend)
+
