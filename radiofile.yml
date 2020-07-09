@@ -3,6 +3,13 @@
 viz: "plots"
 data.processed: "data/processed"
 
+
+###Differential analysis and ATAC seq 
+#SampleSheets Atac-Seq
+atac: "data/processed/atac-seq-samples.24.csv"
+#dba object from the DiffBind pacakge
+dba: "data/processed/atac_seq_dba.rds"
+
 ##TSS data
 tss.gene: "data/external/GRCh37_TSS.bed"
 tss.transcript: "data/external/TSS_ensembl_havana_CCDS_transcripts.bed"
@@ -83,7 +90,7 @@ intersect.all.CMIPS.FET: "data/processed/fetal-heart-comparison/CM-IPS_FET.HRT_f
 intersect.all.CMIPS.FET.tss_windows_1kb: "data/processed/fetal-heart-comparison-only_TSS_1kb_window/CM-IPS_FET.HRT_full_intersect.bed"
 intersect.all.CMIPS.FET.tss.ccds: "data/processed/fetal-heart-comparison-TSS-overlap/CM-IPS_FET.HRT_full_intersect.bed"
 
-intersect.tss: "data/processed/TSS_ensembl_havana_CCDS_transcripts.txt"
+intersect.tss: "data/processed/tss_ccds_intersect_all_chromhmmID.txt"
 
 ##############
 ## Clustering

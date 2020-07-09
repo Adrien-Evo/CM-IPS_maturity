@@ -11,7 +11,7 @@ suppressMessages(library(msigdbr))
 suppressMessages(library(rWikiPathways))
 library(tidyr)
 library(yaml)
-
+library(biomaRt)
 
 
 
@@ -24,28 +24,6 @@ kmeans = read.table(file.path(rootfolder,radio$kmeans.all), h=T, sep ="\t", stri
 
 gmt = file.path(rootfolder,radio$wikipathway.gmt)
 
-###################################################
-######## Select a cluster
-###################################################
-
-## Here cluster 3 from kmeans 15
-
-k = 8
-total_k = 15
-
-ENST = rownames(kmeans[which(kmeans$kmeans15 == k),])
-
-#This will need the geneId slot for ENTREZ gene ID
-
-ids <- bitr(ENST, fromType="ENSEMBLTRANS", toType=c("ENTREZID"), OrgDb="org.Hs.eg.db")
-
-gene = ids$ENTREZID
-
-fold_flag = FALSE
-
-
-# SUMMARIZED
-SUMMARIZED = vector()
 
 summarize_gsea <- function(gsea_result, database){
 
@@ -74,7 +52,59 @@ return(c(database,"OverRepresentation",deparse(substitute(ora_result)),nb_enrich
 }
 }
 
+###################################################
+######## Select a cluster
+###################################################
+
+colourcmips= read.table(file.path(rootfolder,radio$color.mapping.cmips),sep="\t",stringsAsFactors=FALSE,check.names=FALSE)
+##Keeping only annotation that we have
+colourcmips = colourcmips[c(1,2,3,4,5,10,11),]
+
+for(state in colourcmips$V1){
+  #state= "Active_promoter"
+plotfolder = file.path(rootfolder,paste0("plots/clustering/clusterProfiler/",state))
+
+## Here cluster 3 from kmeans 10
+select = kmeans[which(kmeans[,1] == state),]
+dir.create(plotfolder)
+mart <- useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl")
+
+for(k in 1:10){
+
+
+total_k = 10
+############
+############
+ENST = rownames(select[which(select$singular_kmeans == k),])
+
+#ENST = rownames(kmeans[which(kmeans$kmeans15 == k),])
+
+### Looking at cluster 1 in details 
+
+#This will need the geneId slot for ENTREZ gene ID
+
+###############################
+#####BiomaRt conversion
+###############################
+results <- getBM(attributes = c("ensembl_gene_id","external_gene_name","entrezgene_id"), filters = "ensembl_transcript_id",
+           values = ENST, mart = mart)
+
+
+#ids <- bitr(ENST, fromType="ENSEMBLTRANS", toType=c("ENTREZID","GENENAME","SYMBOL"), OrgDb="org.Hs.eg.db")
+
+#gene = ids$ENTREZID
+gene= results$entrezgene_id
+fold_flag = FALSE
+
+enrich_function(k,plotfolder,total_k,gene)
+}
+}
+
+enrich_function <- function(k, plotfolder,total_k, gene){
 # WIKIPATHWAY
+
+# SUMMARIZED
+SUMMARIZED = vector()
 
 cat("WikiPathways\n")
 
@@ -163,9 +193,7 @@ SUMMARIZED = rbind(SUMMARIZED, summarize_ora(ora_MF_go,"GO_MolecularFonction") )
 search_kegg_organism('hsa', by='kegg_code')
 
 # Here you need to say human because theres a function called organismMapper that will translate it (horribly) in the proper organism
-ora_kegg <- enrichKEGG(gene = gene,
-                organism     = 'hsa',
-                pvalueCutoff = 0.05)
+ora_kegg <- enrichKEGG(gene = gene,organism     = 'hsa',pvalueCutoff = 0.05)
 
 SUMMARIZED = rbind(SUMMARIZED, summarize_ora(ora_kegg,"KEGG") )
 
@@ -182,34 +210,34 @@ write.table(summarized.df,file.path(rootfolder,"data/processed/clustering/cluste
 #  Visualization for Over Representation test
 
 viz_ORA <- function(enrichR_output, database, GO = FALSE){
-  
+
   # --------- Dotplot ----------
-  dotplot_plot = dotplot(enrichR_output, showCategory=30) + ggtitle("dotplot for ORA")
+  dotplot_plot = dotplot(enrichR_output, showCategory=30) + ggtitle(database)
   try(ggsave(paste0("kmeans_",total_k,"_clusterNB_",k,"_",database,"_dotplot_ora.png"),dotplot_plot,width = 10, height = 6))
   
   # ----- Enrichment map or goplot ------
   if(GO == FALSE){
-    emapplot_plot = emapplot(enrichR_output)
-    try(ggsave(paste0("kmeans_",total_k,"_clusterNB_",k,"_",database,"_enrichment_map_ora.png"),emapplot_plot,width = 8, height = 8))
+    emapplot_plot = emapplot(enrichR_output) + ggtitle(database)
+    try(ggsave(paste0("kmeans_",total_k,"_clusterNB_",k,"_",database,"_enrichment_map_ora.png"),emapplot_plot,width = 16, height = 16))
     
   }else{
-    goplot_plot = goplot(enrichR_output)
-    try(ggsave(paste0("kmeans_",total_k,"_clusterNB_",k,"_",database,"_enrichment_map_ora_GO.png"),goplot_plot,width = 6, height = 6))
+    goplot_plot = goplot(enrichR_output) + ggtitle(database)
+    try(ggsave(paste0("kmeans_",total_k,"_clusterNB_",k,"_",database,"_enrichment_map_ora_GO.png"),goplot_plot,width = 16, height = 16))
   }
 
   # --------- Heatmap ---------- 
-  heatplot_plot = heatplot(enrichR_output)
+  heatplot_plot = heatplot(enrichR_output) + ggtitle(database)
   try(ggsave(paste0("kmeans_",total_k,"_clusterNB_",k,"_",database,"_heatmap_ora.png"),heatplot_plot,width = 24, height = 12))
 
   # ---- Network w/t genes ----- 
 
-  cnetplot_plot = cnetplot(enrichR_output)
+  cnetplot_plot = cnetplot(enrichR_output) + ggtitle(database)
   try(ggsave(paste0("kmeans_",total_k,"_clusterNB_",k,"_",database,"_cnetplot_ora.png"),cnetplot_plot,width = 12, height = 12))
 }
 
 
 # ~~~~~~~~ Move to plots directory ~~~~~~~~~~
-setwd(file.path(rootfolder,"plots/clustering/clusterProfiler"))
+setwd(plotfolder)
 for( i in 1:length(summarized.df[,1])){
 
 anaOut = get(summarized.df$varName[i])
@@ -221,14 +249,12 @@ cat("\n\n")
 if(length(grep("go",anaType) == 1)){
 GO = TRUE
 }
-if(as.numeric(summarized.df$enrichedTerms[i]) > 0){
-if(length(grep("ora",anaType)) == 1){
-viz_ORA(enrichR_output = anaOut, database = summarized.df$DB[i], GO = GO)
-}
+if(as.numeric(summarized.df$enrichedTerms[i]) > 1){
+if(length(grep("ora",anaType)) == 1){viz_ORA(enrichR_output = anaOut, database = summarized.df$DB[i], GO = GO)}
 }
 }
 
-
+}
 
 # hsa05414 <- pathview(gene.data  = geneList,
 #                      pathway.id = "hsa05414",
@@ -244,3 +270,5 @@ viz_ORA(enrichR_output = anaOut, database = summarized.df$DB[i], GO = GO)
 # data(gse16873.d)
 # v.out <- pathview(gene.data = gse16873.d[, 1], pathway.id = "04110",
 #                   species = "hsa", out.suffix = "gse16873")
+
+
