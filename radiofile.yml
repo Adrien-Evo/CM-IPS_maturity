@@ -77,9 +77,9 @@ BRN.ADLT.c: "data/processed/BRN.ADLT.cleaned.txt"
 ##########################
 atac.sample.sheet: "data/processed/atac-seq-samples.24.csv"
 # Intersection between chromHMM states and differentially binding atac-seq peaks
-atac.chrom: "data/processed/tss_ccds_intersect_all_chromhmm_test_atac.txt"
+atac.chrom: "data/processed/ATAC/tss_ccds_intersect_all_chromhmm_ATAC_Diff_peaks.txt"
 #Same as atac chrom but joined with the kmeans calculated with the chromHMM states. Regions matching sex chr have been removed
-atac.chrom.kmeans: "data/processed/ATAC/tss_ccds_intersect_all_chromhmm_kmeans_atac.txt"
+atac.chrom.kmeans: "data/processed/ATAC/tss_ccds_intersect_all_chromhmm_ATAC_Diff_peaks_KMEANS_added.txt"
 
 
 ###############
