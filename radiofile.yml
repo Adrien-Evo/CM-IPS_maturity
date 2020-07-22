@@ -4,12 +4,6 @@ viz: "plots"
 data.processed: "data/processed"
 
 
-###Differential analysis and ATAC seq 
-#SampleSheets Atac-Seq
-atac: "data/processed/atac-seq-samples.24.csv"
-#dba object from the DiffBind pacakge
-dba: "data/processed/atac_seq_dba.rds"
-
 ##TSS data
 tss.gene: "data/external/GRCh37_TSS.bed"
 tss.transcript: "data/external/TSS_ensembl_havana_CCDS_transcripts.bed"
@@ -17,7 +11,7 @@ tss.transcript: "data/external/TSS_ensembl_havana_CCDS_transcripts.bed"
 ## Annot data for wikipathway and clusterProfiler
 wikipathway.gmt: "data/external/wikipathways-20200110-gmt-Homo_sapiens.gmt"
 
-###CHhromHMM colormapping file for plots
+###ChromHMM colormapping file for plots
 color.mapping.cmips: "data/external/chromHMM_color_CMIPS_state_mapping.csv"
 color.mapping.encode.15: "data/external/chromHMM_color_ENCODE_15_states_mapping.csv"
 color.mapping.encode.18: "data/external/chromHMM_color_ENCODE_18_states_mapping.csv"
@@ -78,6 +72,16 @@ BRN.FET.c: "data/processed/BRN.FET.cleaned.txt"
 ENCODE.BRN.ADLT: "data/external/ROADMAP-15-states-chromHMM/E071_18_core_K27ac_stateno.bed"
 BRN.ADLT.c: "data/processed/BRN.ADLT.cleaned.txt"
 
+###########################
+### ATAC-SEQ data
+##########################
+atac.sample.sheet: "data/processed/atac-seq-samples.24.csv"
+# Intersection between chromHMM states and differentially binding atac-seq peaks
+atac.chrom: "data/processed/tss_ccds_intersect_all_chromhmm_test_atac.txt"
+#Same as atac chrom but joined with the kmeans calculated with the chromHMM states. Regions matching sex chr have been removed
+atac.chrom.kmeans: "data/processed/ATAC/tss_ccds_intersect_all_chromhmm_kmeans_atac.txt"
+
+
 ###############
 ## Intersect folder : Intersection between chromHMM states of ENCODE and our sample
 ###############
@@ -95,7 +99,14 @@ intersect.tss: "data/processed/tss_ccds_intersect_all_chromhmmID.txt"
 ##############
 ## Clustering
 ##############
-cluster.gower.diana: "data/processed/clustering/gower.diana.txt"
+
 kmeans.all: "data/processed/clustering/kmeans_all.txt"
+
+##############
+## Differential analysis with ATAC-SEQ
+##############
+
+#dba object from the DiffBind pacakge
+dba.count: "data/processed/atac_seq_dba_count.rds"
 
 

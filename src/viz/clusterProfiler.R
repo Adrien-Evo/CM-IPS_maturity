@@ -51,7 +51,12 @@ nb_enriched_term = sum(ora_result@result$p.adjust < pval)
 return(c(database,"OverRepresentation",deparse(substitute(ora_result)),nb_enriched_term,pval,p_adjust_method))
 }
 }
+mart <- useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl")
 
+###############Selecting ENST based on gene name
+tt = results[grep("SCN5A",results$external_gene_name),]
+bb = match(tt$ensembl_transcript_id,row.names(kmeans))
+kmeans[bb,]
 ###################################################
 ######## Select a cluster
 ###################################################
@@ -67,7 +72,6 @@ plotfolder = file.path(rootfolder,paste0("plots/clustering/clusterProfiler/",sta
 ## Here cluster 3 from kmeans 10
 select = kmeans[which(kmeans[,1] == state),]
 dir.create(plotfolder)
-mart <- useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl")
 
 for(k in 1:10){
 
@@ -86,8 +90,7 @@ ENST = rownames(select[which(select$singular_kmeans == k),])
 ###############################
 #####BiomaRt conversion
 ###############################
-results <- getBM(attributes = c("ensembl_gene_id","external_gene_name","entrezgene_id"), filters = "ensembl_transcript_id",
-           values = ENST, mart = mart)
+results <- getBM(attributes = c("ensembl_transcript_id","ensembl_gene_id","external_gene_name","entrezgene_id"), filters = "ensembl_transcript_id", values = ENST, mart = mart)
 
 
 #ids <- bitr(ENST, fromType="ENSEMBLTRANS", toType=c("ENTREZID","GENENAME","SYMBOL"), OrgDb="org.Hs.eg.db")

@@ -51,7 +51,7 @@ right.atrium.col = "#66c2a5"
 left.ventricule.col = "#8da0cb"
 right.ventricule.col ="#a6d854"
 brain.col = "#e5c494"
-heart.col = "#e41a1c"-
+heart.col = "#e41a1c"
 #Colors from 8-class Set2 R colorbrewer
 ############# Source
 source.cols = c(CM_IPS.col,rep(ENCODE.col,length(ENCODE_samps)))
@@ -348,7 +348,7 @@ draw(dd, annotation_legend_list = lgd)
 dev.off()
 
 #######################################################
-####  Active TSS plotting
+####  Plotting for each states in CMIPS
 #######################################################
 for(state in colourcmips$V1){
 lgd_encode = Legend(title = "ChromHMM ENCODE",labels=ENCODE_colours$V1, legend_gp = gpar(fill = ENCODE_colours$V2),border = "black")
