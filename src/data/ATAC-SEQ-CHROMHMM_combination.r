@@ -51,6 +51,6 @@ indexmatch <- match(rownames(atac_chromhmm),rownames(kmeans))
 #test = cbind(atac_chromhmm[!is.na(indexmatch),c(1,2)],kmeans[,], rownames(kmeans))
 # all(rownames(test)== test[,15])
 
-df = cbind(atac_chromhmm[!is.na(indexmatch),c(1,2)],kmeans[,])
+df = cbind(atac_chromhmm[!is.na(indexmatch),c(1,2,3,4)],kmeans[,])
 
 write.table(df, file.path(rootfolder,radio$atac.chrom.kmeans), row.names=TRUE, col.names=TRUE,sep="\t")
