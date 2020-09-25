@@ -172,8 +172,7 @@ draw(dd, annotation_legend_list = lgd)
 dev.off()
 
 ###Testons singular kmeans sur poised promoter and ips. It's super similar to singular keamsn without selecting atac-seq peaks
-#for(state in colourcmips$V1){
-state="Poised_promoter"
+for(state in colourcmips$V1){
 lgd_encode = Legend(title = "ChromHMM ENCODE",labels=ENCODE_colours$V1, legend_gp = gpar(fill = ENCODE_colours$V2),border = "black")
 
 lgd_cmips = Legend(title = "ChromHMM CM-iPS",labels=state, legend_gp = gpar(fill = colourcmips$V2[which(colourcmips$V1 == state)]),border = "black")
@@ -196,19 +195,20 @@ match(mat[,5],encode_HMM_order),
 match(mat[,6],encode_HMM_order))
 
 
-png(file.path(rootfolder,"plots","Atac-seq-integration","clustering",paste0(state,"_iPSpeaks_singular_kmeans10.png")),width = 480, height = 480, units = "px")
+png(file.path(rootfolder,"plots","Atac-seq-integration","clustering",paste0(state,"_iPSpeaks_singular_kmeans10.png")),width = 640, height = 640, units = "px")
 
 dd <-ComplexHeatmap::Heatmap(mat[sort_order,],col = chromHMM_color_scheme,show_row_names = FALSE,border = TRUE,heatmap_legend_param=list(title = "ChromHMM annot"),row_split= factor(select$singular_kmeans[sort_order],levels = 1:10),
   cluster_row_slices = FALSE,bottom_annotation = matrix.annotation,column_names_side = "top",column_names_rot = 45,show_heatmap_legend = FALSE,gap = unit(2, "mm"),row_title_rot = 0,
   use_raster = TRUE, raster_device = "png",raster_quality = 2)
 draw(dd, annotation_legend_list = lgd)
 dev.off()
+write.table(rownames(mat),file.path(rootfolder,"data","processed","ATAC","intersect-sets", paste0(state,"_iPSpeaks.txt")),col.names = F,row.names = F,quote=F)
 
-#}
+}
+
 ###CMCMCMCMCMCMCMCMCMCMCMCMCMC
 ###Testons singular kmeans sur poised promoter and CM. It's super similar to singular keamsn without selecting atac-seq peaks
-#for(state in colourcmips$V1){
-state="Poised_promoter"
+for(state in colourcmips$V1){
 lgd_encode = Legend(title = "ChromHMM ENCODE",labels=ENCODE_colours$V1, legend_gp = gpar(fill = ENCODE_colours$V2),border = "black")
 
 lgd_cmips = Legend(title = "ChromHMM CM-iPS",labels=state, legend_gp = gpar(fill = colourcmips$V2[which(colourcmips$V1 == state)]),border = "black")
@@ -231,7 +231,7 @@ match(mat[,5],encode_HMM_order),
 match(mat[,6],encode_HMM_order))
 
 
-png(file.path(rootfolder,"plots","Atac-seq-integration","clustering",paste0(state,"_CMiPSpeaks_singular_kmeans10.png")),width = 480, height = 480, units = "px")
+png(file.path(rootfolder,"plots","Atac-seq-integration","clustering",paste0(state,"_CMpeaks_singular_kmeans10.png")),width = 640, height = 640, units = "px")
 
 dd <-ComplexHeatmap::Heatmap(mat[sort_order,],col = chromHMM_color_scheme,show_row_names = FALSE,border = TRUE,heatmap_legend_param=list(title = "ChromHMM annot"),row_split= factor(select$singular_kmeans[sort_order],levels = 1:10),
   cluster_row_slices = FALSE,bottom_annotation = matrix.annotation,column_names_side = "top",column_names_rot = 45,show_heatmap_legend = FALSE,gap = unit(2, "mm"),row_title_rot = 0,
@@ -239,6 +239,7 @@ dd <-ComplexHeatmap::Heatmap(mat[sort_order,],col = chromHMM_color_scheme,show_r
 draw(dd, annotation_legend_list = lgd)
 dev.off()
 
-#}
+write.table(rownames(mat),file.path(rootfolder,"data","processed","ATAC","intersect-sets", paste0(state,"_CMpeaks.txt")),col.names = F,row.names = F,quote=F)
+}
 
 

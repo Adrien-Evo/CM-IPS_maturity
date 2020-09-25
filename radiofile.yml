@@ -110,3 +110,9 @@ kmeans.all: "data/processed/clustering/kmeans_all.txt"
 dba.count: "data/processed/atac_seq_dba_count.rds"
 
 
+################
+# Bastien RNA-SEQ data cluster
+################
+rna.cluster: "data/external/Bastien-rna/GeneList.txt"
+rna.go: "data/external/Bastien-rna/GOBP_Clsuter"
+

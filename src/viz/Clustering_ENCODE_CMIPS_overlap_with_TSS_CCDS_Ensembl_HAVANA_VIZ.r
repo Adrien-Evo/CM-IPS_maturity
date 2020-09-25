@@ -372,7 +372,7 @@ match(mat[,5],encode_HMM_order),
 match(mat[,6],encode_HMM_order))
 
 
-png(file.path(rootfolder,"plots","clustering",paste0(state,"_kmeans10.png")),width = 480, height = 480, units = "px")
+png(file.path(rootfolder,"plots","clustering",paste0(state,"_kmeans10.png")),width = 640, height = 640, units = "px")
 
 dd <-ComplexHeatmap::Heatmap(mat[sort_order,],col = chromHMM_color_scheme,jitter = TRUE,show_row_names = FALSE,border = TRUE,heatmap_legend_param=list(title = "ChromHMM annot"),row_split= factor(select$singular_kmeans[sort_order],levels = 1:10),
   cluster_row_slices = FALSE,bottom_annotation = matrix.annotation,column_names_side = "top",column_names_rot = 45,show_heatmap_legend = FALSE,gap = unit(2, "mm"),row_title_rot = 0,
